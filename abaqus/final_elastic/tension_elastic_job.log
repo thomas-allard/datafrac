@@ -1,0 +1,22 @@
+Analysis initiated from SIMULIA established products
+Abaqus JOB tension_elastic_job
+Abaqus 2021.HF9
+Abaqus License Manager checked out the following licenses:
+Abaqus/Standard checked out 5 tokens from Flexnet server 128.138.222.112.
+<54 out of 64 licenses remain available>.
+Begin Analysis Input File Processor
+4/15/2022 6:27:19 PM
+Run pre.exe
+4/15/2022 6:27:24 PM
+End Analysis Input File Processor
+Begin Abaqus/Standard Analysis
+4/15/2022 6:27:24 PM
+Run standard.exe
+4/15/2022 6:27:44 PM
+End Abaqus/Standard Analysis
+Begin SIM Wrap-up
+4/15/2022 6:27:45 PM
+Run SMASimUtility.exe
+4/15/2022 6:27:45 PM
+End SIM Wrap-up
+Abaqus JOB tension_elastic_job COMPLETED
