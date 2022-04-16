@@ -8,7 +8,7 @@ import array
 #================================================================ PARAMETERS ===
 number_of_nodes = 2760  # don't change unless mesh is changed
 
-option = 1          # 1 for elastic only
+option = 2          # 1 for elastic only
                     # 2 for xfem
                     
 #====================================================================== MAIN ===
@@ -49,6 +49,7 @@ nodeIds = [int(i) for i in range(1, number_of_nodes + 1)]
 for t in frames:
     time = t.frameValue
     Id = t.frameId
+    strId = str(Id)
 
     string = 'frame # ' + str(Id) + ' at time: ' + str(time) + '\n'
     
@@ -93,7 +94,7 @@ for t in frames:
     
     # write text file for current frame
     block = np.vstack([Ux, Uy, mises, s11, s22, s12, NE11, NE22, NE12])
-    out_name = directory + 'step_' + str(Id) +'.txt'
+    out_name = directory + 'step_' + strId.zfill(3) +'.txt'
     np.savetxt(out_name,np.transpose(block))
     
     # append timing information at the end of the file
