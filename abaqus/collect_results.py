@@ -49,31 +49,37 @@ def file2array(file, range, split=' '):
     # load in each line of data as array
     with open(file, 'r') as f:
         line_string = f.read().splitlines()
-    list = []
     
+    # loop through the lines from the file, split, and append to list
+    list = []
     for i, line in enumerate(line_string):
+        # data lines
         if i < range: 
             list.append(line.split(split))
+        # final line has the timestamp
         if i == range:
             thing = line.split(split)
             timestamp = thing
-    #print(list)
+
+    # convert list to an array of type float64
     array = np.asarray(list, dtype=np.float64)
-    #array = np.asarray(list)
+
     return(array, timestamp)
 
-def createDataArray(file, range):
-    #col_labels = ['node', 'ux', 'uy']
-    dim = ('node', 'fields')
-    #label = {'node':['nodeID'],'fields':['ux (mm)','uy (mm)']}
-    label = {'fields':['ux','uy','Mises','S11','S22','S12','NE11','NE22','NE12']}
+def createDataArray(file, range, node_list):
+    # call file2array to load in data
     array, timestamp = file2array(file, range)
-    print(np.shape(array))
-    #ux = array[:,0]
-    #uy = array[:,1]
-    #dataset = xr.DataArray(array, coords=col_labels, attrs={timestamp})
-    dataset = xr.DataArray(array, dims=dim, coords=label, attrs={'time':timestamp})
-    return(dataset)
+
+    # define relevant information
+    dim = ('node', 'field')
+    field_labels = ['ux','uy','Mises','S11','S22','S12','NE11','NE22','NE12']
+    labels = [("node",node_list), ("field",field_labels)]
+    name = file[:-4]
+    
+    # create DataArray
+    data = xr.DataArray(array, dims=dim, coords=labels, attrs={'time':timestamp}, name=name)
+    
+    return(data)
 
 #====================================================================== MAIN ===
 # define some parameters based on option 1 or 2
@@ -105,10 +111,11 @@ print(f'Number of .txt files found = {len(files)}')
 #print(files)
 
 # read in text files and stack into a dictionary
+node_list = [str(i) for i in range(1,number_of_nodes+1)]
 datasets = {}
 for file in files:
     name = file[:-4]
-    dataArray = createDataArray(file, number_of_nodes)
+    dataArray = createDataArray(file, number_of_nodes,node_list)
     datasets[name] = dataArray
 
 # combine DataArrays into a dataset    
