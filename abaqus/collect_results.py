@@ -75,6 +75,7 @@ def createDataArray(file, range, node_list):
     field_labels = ['ux','uy','Mises','S11','S22','S12','NE11','NE22','NE12']
     labels = [("node",node_list), ("field",field_labels)]
     name = file[:-4]
+    timestamp = str(timestamp)
     
     # create DataArray
     data = xr.DataArray(array, dims=dim, coords=labels, attrs={'time':timestamp}, name=name)
