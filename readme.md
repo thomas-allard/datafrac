@@ -1,4 +1,4 @@
-#Welcome lol
+# Welcome lol
 
 This project investigates the applicability of physics informed neural networks (PINN) for discovering material behavior parameters for two conditions:
 1. elasticity
