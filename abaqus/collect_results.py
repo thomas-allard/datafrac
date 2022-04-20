@@ -38,11 +38,21 @@ A saved DataSet may be loaded as follows:
     'set = xr.open_dataset('{filename}.nc')
     
 Instructions for parsing out simulation data from the NetCDF file is forthcoming
+    1. navigate to folder with relevant netcdf file and load. For example:
+        import xarray as xr
+        import numpy as np
+        set = xr.open_dataset('elastic_cdf.nc')
+    2. slice out a DataArray
+        step_080 = set.step_080
+    3. select a specific field
+        ux_80 = step_080.sel(field='ux')
+    4. convert to an array
+        ux_80_array = ux_80.to_numpy()
 '''
 #================================================================ PARAMETERS ===
 number_of_nodes = 2760  # don't change unless mesh is changed
 
-option = 1          # 1 for elastic only
+option = 2          # 1 for elastic only
                     # 2 for xfem
 #================================================================= FUNCTIONS ===
 def file2array(file, range, split=' '):
@@ -52,6 +62,7 @@ def file2array(file, range, split=' '):
     
     # loop through the lines from the file, split, and append to list
     list = []
+    timestamp = 0 # default 
     for i, line in enumerate(line_string):
         # data lines
         if i < range: 
@@ -82,6 +93,21 @@ def createDataArray(file, range, node_list):
     
     return(data)
 
+def collectNodes(file, range, node_list):
+    # call file2array to load in data
+    array, timestamp = file2array(file, range)
+    
+    # define relevant information
+    dim = ('node', 'coordinate')
+    coord_labels = ['id','x','y']
+    labels = [("node",node_list), ("coordinate",coord_labels)]
+    name = 'nodal_coordinates'
+    
+    # create DataArray
+    data = xr.DataArray(array, dims=dim, coords=labels, name=name)
+    
+    return(data)
+
 #====================================================================== MAIN ===
 # define some parameters based on option 1 or 2
 if option == 1:
@@ -108,6 +134,8 @@ else:
 files = []
 for file in glob.glob("*.txt"):
     files.append(file)
+#files.remove(files.index('nodes.txt'))
+files.remove('nodes.txt')
 print(f'Number of .txt files found = {len(files)}')
 #print(files)
 
@@ -118,6 +146,10 @@ for file in files:
     name = file[:-4]
     dataArray = createDataArray(file, number_of_nodes,node_list)
     datasets[name] = dataArray
+    
+# # get nodal coordaintes and add to dictionary
+# NodeArray = collectNodes(file, number_of_nodes, node_list)
+# datasets['nodal_coordinates'] = NodeArray
 
 # combine DataArrays into a dataset    
 set = xr.Dataset(datasets)
