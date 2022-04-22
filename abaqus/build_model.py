@@ -45,8 +45,11 @@ ETA   = 1.0                               # Power-law exponent
 
 disp = 2.0
 
-option = 2          # 1 for elastic only
+option = 1          # 1 for elastic only
                     # 2 for xfem
+                    
+fields = 1          # 1 for field variables averaged at nodes
+                    # 2 for field variables at integration points - normal
 
 #---------------------------------------------------------------------------------
 # === Create model ===
@@ -65,8 +68,7 @@ elif option == 2:
 else:
     print('Specify valid option')
     
-fields = 1      # 1 for nodal
-                # 2 for elemental
+
     
 modelName = modelName_1 + '_' + modelName_2
 
