@@ -53,11 +53,20 @@ option = 2          # 1 for elastic only
 Mdb()
 
 if option == 1:
-    modelName_2 = 'elastic'
+    if fields == 1:
+        modelName_2 = 'elastic'
+    elif fields ==2:
+        modelName_2 = 'elastic_normal'
 elif option == 2:
-    modelName_2 = 'fracture'
+    if fields == 1:
+        modelName_2 = 'fracture'
+    elif fields ==2:
+        modelName_2 = 'fracture_normal'
 else:
     print('Specify valid option')
+    
+fields = 1      # 1 for nodal
+                # 2 for elemental
     
 modelName = modelName_1 + '_' + modelName_2
 
@@ -177,14 +186,22 @@ plateModel.steps['Static'].control.setValues(
     timeIncrementation=(8.0, 10.0, 9.0, 16.0, 10.0, 4.0, 12.0, 20.0, 6.0, 3.0, 
     50.0))
     
-if option == 1:
-    plateModel.fieldOutputRequests['F-Output-1'].setValues(
-        variables=('S', 'LE', 'U', 'RF', 'E', 'NE'), 
-        position=AVERAGED_AT_NODES)
-if option == 2:
-    plateModel.fieldOutputRequests['F-Output-1'].setValues(
-        variables=('S', 'LE', 'U', 'RF', 'PHILSM', 'STATUSXFEM', 'E', 'NE'),
-        position=AVERAGED_AT_NODES)
+if fields == 1:
+    if option == 1:
+        plateModel.fieldOutputRequests['F-Output-1'].setValues(
+            variables=('S', 'LE', 'U', 'RF', 'E', 'NE'), 
+            position=AVERAGED_AT_NODES)
+    if option == 2:
+        plateModel.fieldOutputRequests['F-Output-1'].setValues(
+            variables=('S', 'LE', 'U', 'RF', 'PHILSM', 'STATUSXFEM', 'E', 'NE'),
+            position=AVERAGED_AT_NODES)
+elif fields == 2:
+    if option == 1:
+        plateModel.fieldOutputRequests['F-Output-1'].setValues(
+            variables=('S', 'LE', 'U', 'RF', 'E', 'NE'))
+    if option == 2:
+        plateModel.fieldOutputRequests['F-Output-1'].setValues(
+            variables=('S', 'LE', 'U', 'RF', 'PHILSM', 'STATUSXFEM', 'E', 'NE'))
 
 plateModel.HistoryOutputRequest(createStepName='Static', 
     name='H-Output-2', rebar=EXCLUDE, region=
