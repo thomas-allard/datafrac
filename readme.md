@@ -36,6 +36,7 @@ A master DataSet is created by "stacking" all DataArrays for a simulations
     corresponding to the entire duration of the simulation.
 Each DataArray has a 2760 rows corresponding to the 2760 nodes of the mesh.
 The following fields are the corresponding columns of each data array:
+
     - ux: displacement in the x-direction (mm). Nodal value
     - uy: displacement in the y-direction (mm). Nodal value
     - Mises: von Mises stress (MPa)
